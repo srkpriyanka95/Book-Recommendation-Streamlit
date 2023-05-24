@@ -19,9 +19,10 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 # Load Dataset
-books_df=pd.read_csv("data/Copy of Books.csv",low_memory=False)
-ratings_df=pd.read_csv("data/Copy of Ratings.csv",low_memory=False)
-users_df=pd.read_csv("data/Copy of Users.csv",low_memory=False)
+
+books_df=pd.read_csv("https://drive.google.com/uc?id=1hgrWH_MR2H5bZw_1fzX_bZ7likJAD1S_",low_memory=False)
+ratings_df=pd.read_csv("https://drive.google.com/uc?id=1PM5HkQd_iU_mzwfCJJUiMGV8uCSQR6Ns",low_memory=False)
+users_df=pd.read_csv("https://drive.google.com/uc?id=1dCZ5M_EfmRUaW0R9cLLPO8dsCF3nX1sc",low_memory=False)
 user_rating_df = pd.merge(ratings_df,users_df,on='User-ID',how='left')
 data=pd.merge(user_rating_df,books_df,on='ISBN',how='inner')
 
