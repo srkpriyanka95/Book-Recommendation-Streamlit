@@ -19,33 +19,7 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 # Load Dataset
-
-books_df=pd.read_csv("https://drive.google.com/uc?id=1hgrWH_MR2H5bZw_1fzX_bZ7likJAD1S_",low_memory=False)
-ratings_df=pd.read_csv("https://drive.google.com/uc?id=1PM5HkQd_iU_mzwfCJJUiMGV8uCSQR6Ns",low_memory=False)
-users_df=pd.read_csv("https://drive.google.com/uc?id=1dCZ5M_EfmRUaW0R9cLLPO8dsCF3nX1sc",low_memory=False)
-user_rating_df = pd.merge(ratings_df,users_df,on='User-ID',how='left')
-data=pd.merge(user_rating_df,books_df,on='ISBN',how='inner')
-
-data.drop(columns={'Image-URL-S','Image-URL-M','Image-URL-L'},inplace=True)
-Item_based=data[['ISBN','Book-Title','Book-Author']].copy()
-# Creating a dataframe by groping the ISBN by total count of ratings for the books and the mean rating for the book
-mean_rating=data.groupby('ISBN').agg({'Book-Title':'count','Book-Rating':'mean'}).reset_index()
-
-# Renaming the columns for clarity of data and rounding off the float values in the mean rating column
-mean_rating.rename(columns={'Book-Title':'Rating-Count','Book-Rating':'Mean-Rating'},inplace=True)
-mean_rating['Mean-Rating'] = mean_rating['Mean-Rating'].round()
-
-# Merging the mean_rating data frame with the Item based dataframe on ISBN column
-Item_based=Item_based.merge(mean_rating,on='ISBN')
-# Removing the duplicates from the dataframe
-Item_based.drop_duplicates(inplace=True)
-# Applying basic preprocessing to the book title in the dataframe
-# Entire book title is converted into lower case and any characters other than alphabet and numbers are removed using regular expression
-Item_based['altered_title'] = Item_based['Book-Title'].apply(lambda x:x.lower())
-Item_based['altered_title'] = Item_based['altered_title'].str.replace('[^a-zA-Z0-9]',' ',regex=True)
-
-# Removing the excess spaces between words in the altered title
-Item_based['altered_title'] = Item_based['altered_title'].str.replace('\s+',' ',regex=True)
+Item_based = pd.read_csv('https://drive.google.com/uc?id=1ww--TEVo5b8i-G7jH6j4uJlzU3-wKoot')
 # Applying TfidfVectorizer to the altered titlte column
 vectorizer =TfidfVectorizer()
 tfidf=vectorizer.fit_transform(Item_based['altered_title'])
